@@ -14,10 +14,13 @@
         </div>
       </div>
 
+      <!-- 签到转盘 -->
+      <CheckinWheel v-if="hasPlan" style="animation-delay: 0.1s"/>
+
       <!-- 通知区域 -->
       <!-- 待处理事项提示 -->
       <div v-if="hasPendingItems" class="dashboard-card pending-items-card"
-           :class="{'card-animate': !loading.userStats}" style="animation-delay: 0.1s">
+           :class="{'card-animate': !loading.userStats}" style="animation-delay: 0.15s">
         <div class="card-header">
           <h2 class="card-title">{{ $t('dashboard.pendingItems') }}</h2>
         </div>
@@ -742,6 +745,7 @@ import {
   IconCalendarPlus
 } from '@tabler/icons-vue';
 import CommonDialog from '@/components/popup/CommonDialog.vue';
+import CheckinWheel from '@/components/CheckinWheel.vue';
 import {getNotices, getSubscribe, getUserConfig, getUserInfo, getUserStats, setNextPeriod} from '@/api/dashboard';
 import {useToast} from '@/composables/useToast';
 import {submitOrder} from '@/api/shop';
@@ -854,7 +858,8 @@ export default {
     IconAlertTriangle,
     IconX,
     IconCalendarPlus,
-    CommonDialog
+    CommonDialog,
+    CheckinWheel
   },
   setup() {
     const {t, locale} = useI18n();

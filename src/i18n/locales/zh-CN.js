@@ -197,6 +197,13 @@ export default {
         activateDataCycleInAdvance: '提前开启流量周期',
         resetDataCycleNotice:'点击「我知道了」将会扣除当前流量周期剩余订阅时长（按月重置时扣除本周期剩余订阅时长，每月1号重置时扣除整月时间30天，年周期同理），系统将会重置您的已使用流量。',
         nextPeriodError:'提前开启下月失败',
+        // 签到相关
+        dailyCheckin: '每日签到',
+        checkinNow: '立即签到',
+        spinning: '转盘中...',
+        checkedIn: '已签到',
+        alreadyCheckedIn: '今日已签到',
+        checkinFailed: '签到失败',
         nextPeriodSuccess:'提前开启下月成功',
         renewPlan: '续费套餐',
         noPlanToRenew: '没有可续费的套餐',

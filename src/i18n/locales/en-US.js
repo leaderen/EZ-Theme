@@ -197,6 +197,13 @@ export default {
         activateDataCycleInAdvance: 'Activate data cycle in advance',
         resetDataCycleNotice:'Clicking "Got it" will deduct the remaining subscription time of the current data cycle. The system will reset your used data.',
         nextPeriodError:'Failed to start next month early',
+        // Check-in related
+        dailyCheckin: 'Daily Check-in',
+        checkinNow: 'Check-in Now',
+        spinning: 'Spinning...',
+        checkedIn: 'Checked In',
+        alreadyCheckedIn: 'Already checked in today',
+        checkinFailed: 'Check-in failed',
         nextPeriodSuccess:'Successfully started next month early',
         renewPlan: 'Renew Plan',
         noPlanToRenew: 'No plan available for renewal',
