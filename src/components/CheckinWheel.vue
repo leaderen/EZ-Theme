@@ -11,9 +11,6 @@
         <div class="checkin-wheel-wrapper">
           <!-- 转盘背景 -->
           <div class="wheel-background" :class="{ 'spinning': isSpinning }">
-            <div class="wheel-center">
-              <div class="wheel-pointer"></div>
-            </div>
             <!-- 奖励区域 -->
             <div 
               v-for="(reward, index) in rewards" 
@@ -21,12 +18,29 @@
               class="reward-segment"
               :style="{ 
                 transform: `rotate(${index * 45}deg)`,
-                background: reward.color 
+                background: reward.gradient 
               }"
             >
-              <div class="reward-text" :style="{ transform: `rotate(-${index * 45}deg)` }">
-                {{ reward.text }}
+              <div class="reward-content">
+                <div class="reward-icon">
+                  <IconGift :size="16"/>
+                </div>
+                <div class="reward-text" :style="{ transform: `rotate(-${index * 45}deg)` }">
+                  {{ reward.text }}
+                </div>
               </div>
+            </div>
+            
+            <!-- 中心圆盘 -->
+            <div class="wheel-center">
+              <div class="center-logo">
+                <IconGift :size="24"/>
+              </div>
+            </div>
+            
+            <!-- 指针 -->
+            <div class="wheel-pointer">
+              <div class="pointer-arrow"></div>
             </div>
           </div>
           
@@ -86,14 +100,46 @@ export default {
     
     // 奖励配置
     const rewards = ref([
-      { text: '10MB', color: '#ff6b6b', value: 10 * 1024 * 1024 },
-      { text: '50MB', color: '#4ecdc4', value: 50 * 1024 * 1024 },
-      { text: '100MB', color: '#45b7d1', value: 100 * 1024 * 1024 },
-      { text: '200MB', color: '#96ceb4', value: 200 * 1024 * 1024 },
-      { text: '500MB', color: '#feca57', value: 500 * 1024 * 1024 },
-      { text: '1GB', color: '#ff9ff3', value: 1024 * 1024 * 1024 },
-      { text: '200MB', color: '#54a0ff', value: 200 * 1024 * 1024 },
-      { text: '100MB', color: '#5f27cd', value: 100 * 1024 * 1024 }
+      { 
+        text: '10MB', 
+        gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+        value: 10 * 1024 * 1024 
+      },
+      { 
+        text: '50MB', 
+        gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', 
+        value: 50 * 1024 * 1024 
+      },
+      { 
+        text: '100MB', 
+        gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', 
+        value: 100 * 1024 * 1024 
+      },
+      { 
+        text: '200MB', 
+        gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', 
+        value: 200 * 1024 * 1024 
+      },
+      { 
+        text: '500MB', 
+        gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', 
+        value: 500 * 1024 * 1024 
+      },
+      { 
+        text: '1GB', 
+        gradient: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)', 
+        value: 1024 * 1024 * 1024 
+      },
+      { 
+        text: '200MB', 
+        gradient: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)', 
+        value: 200 * 1024 * 1024 
+      },
+      { 
+        text: '100MB', 
+        gradient: 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)', 
+        value: 100 * 1024 * 1024 
+      }
     ])
     
     // 计算属性
@@ -173,11 +219,29 @@ export default {
 }
 
 .checkin-wheel-card {
-  background: var(--card-bg);
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: var(--card-shadow);
-  border: 1px solid var(--border-color);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.checkin-wheel-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-radius: 24px;
+  z-index: -1;
 }
 
 .card-header {
@@ -188,13 +252,14 @@ export default {
 }
 
 .card-title {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
   color: var(--text-primary);
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .checkin-wheel-wrapper {
@@ -206,21 +271,16 @@ export default {
 
 .wheel-background {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 240px;
+  height: 240px;
   border-radius: 50%;
-  background: conic-gradient(
-    #ff6b6b 0deg 45deg,
-    #4ecdc4 45deg 90deg,
-    #45b7d1 90deg 135deg,
-    #96ceb4 135deg 180deg,
-    #feca57 180deg 225deg,
-    #ff9ff3 225deg 270deg,
-    #54a0ff 270deg 315deg,
-    #5f27cd 315deg 360deg
-  );
-  transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transition: transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.15),
+    0 8px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border: 4px solid rgba(255, 255, 255, 0.3);
 }
 
 .wheel-background.spinning {
@@ -232,44 +292,91 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 40px;
-  height: 40px;
-  background: var(--card-bg);
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  z-index: 2;
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  z-index: 3;
+}
+
+.center-logo {
+  color: #667eea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .wheel-pointer {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+}
+
+.pointer-arrow {
   width: 0;
   height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 16px solid var(--primary-color);
-  transform: translateY(-2px);
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 24px solid #ff6b6b;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  position: relative;
+}
+
+.pointer-arrow::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: -10px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 20px solid #ffffff;
 }
 
 .reward-segment {
   position: absolute;
   top: 0;
   left: 50%;
-  width: 100px;
-  height: 100px;
-  transform-origin: 0 100px;
+  width: 120px;
+  height: 120px;
+  transform-origin: 0 120px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 0 0 120px 120px;
+  overflow: hidden;
+}
+
+.reward-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transform: translateY(20px);
+}
+
+.reward-icon {
+  color: rgba(255, 255, 255, 0.9);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .reward-text {
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
   color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   white-space: nowrap;
+  letter-spacing: 0.5px;
 }
 
 .wheel-button-container {
@@ -280,22 +387,33 @@ export default {
 .wheel-button {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  gap: 10px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 50px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 
+    0 8px 24px rgba(102, 126, 234, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.5px;
 }
 
 .wheel-button:hover:not(.disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 
+    0 12px 32px rgba(102, 126, 234, 0.5),
+    0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.wheel-button:active:not(.disabled) {
+  transform: translateY(-1px) scale(0.98);
 }
 
 .wheel-button.disabled {
@@ -355,14 +473,27 @@ export default {
 /* 响应式设计 */
 @media (max-width: 768px) {
   .wheel-background {
-    width: 160px;
-    height: 160px;
+    width: 200px;
+    height: 200px;
+  }
+  
+  .wheel-center {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .center-logo {
+    font-size: 18px;
   }
   
   .reward-segment {
-    width: 80px;
-    height: 80px;
-    transform-origin: 0 80px;
+    width: 100px;
+    height: 100px;
+    transform-origin: 0 100px;
+  }
+  
+  .reward-content {
+    transform: translateY(15px);
   }
   
   .reward-text {
@@ -370,8 +501,21 @@ export default {
   }
   
   .wheel-button {
-    padding: 10px 20px;
+    padding: 12px 24px;
     font-size: 14px;
+  }
+  
+  .pointer-arrow {
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 20px solid #ff6b6b;
+  }
+  
+  .pointer-arrow::after {
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 16px solid #ffffff;
+    left: -8px;
   }
 }
 </style>
