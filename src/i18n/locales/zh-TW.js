@@ -376,7 +376,16 @@ export default {
     
     largeScreenNotice: '偵測到較大螢幕',
     switchToDesktop: '建議使用電腦端工單頁面以獲得更好的體驗',
-    switchToDesktopView: '切換到電腦端視圖'
+    switchToDesktopView: '切換到電腦端視圖',
+    popup: {
+            close_btn: '關閉',
+            wait_close_btn: '{seconds}秒後關閉'
+        },
+    upPictures: '上傳圖片',
+    uploadingImages: '上傳中...',
+    uploadTipText: '拖曳圖片到此處或點擊上傳',
+    uploadDescText: '支援 JPG、PNG、GIF 格式，最大 5 MB',
+    uploadSuccess: '圖片上傳成功'
   },
   profile: {
     title: '用戶中心',
@@ -529,12 +538,7 @@ export default {
     popup: {
       close_btn: '我知道了',
       wait_close_btn: '請等待 {seconds} 秒'
-    }
-    ,
-    upPictures: '上傳圖片',
-    uploadingImages: '上傳中...',
-    uploadTipText: '拖曳圖片到此處或點擊上傳',
-    uploadDescText: '支援 JPG、PNG、GIF 格式，最大 5 MB'
+    },
   },
   order: {
     title: '確認訂單',

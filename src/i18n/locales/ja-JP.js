@@ -385,7 +385,8 @@ export default {
     upPictures: '画像をアップロード',
     uploadingImages: 'アップロード中...',
     uploadTipText: 'ここに画像をドラッグ＆ドロップするか、クリックしてアップロード',
-    uploadDescText: 'JPG、PNG、GIF 形式に対応、最大 5 MB'
+    uploadDescText: 'JPG、PNG、GIF 形式に対応、最大 5 MB',
+    uploadSuccess: '画像アップロード成功',
   },
   profile: {
     title: 'ユーザーセンター',

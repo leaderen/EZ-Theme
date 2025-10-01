@@ -385,7 +385,8 @@ export default {
     upPictures: 'Загрузить изображения',
     uploadingImages: 'Загрузка...',
     uploadTipText: 'Перетащите изображения сюда или нажмите для загрузки',
-    uploadDescText: 'Поддерживаются форматы JPG, PNG, GIF, до 5 МБ'
+    uploadDescText: 'Поддерживаются форматы JPG, PNG, GIF, до 5 МБ',
+    uploadSuccess: 'Изображение успешно загружено',
   },
   profile: {
     title: 'Центр пользователя',

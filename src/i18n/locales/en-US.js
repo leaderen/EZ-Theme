@@ -390,6 +390,7 @@ export default {
         uploadingImages: 'Uploading images...',
         uploadTipText: 'Drag and drop images here or click to upload',
         uploadDescText: 'Supports JPG, PNG, GIF formats, up to 5 MB',
+        uploadSuccess: 'Image uploaded successfully',
     },
     profile: {
         title: 'User Center',

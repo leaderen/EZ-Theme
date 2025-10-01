@@ -383,7 +383,8 @@ export default {
         upPictures: 'Tải lên hình ảnh',
         uploadingImages: 'Đang tải lên...',
         uploadTipText: 'Kéo thả hình vào đây hoặc nhấn để tải lên',
-        uploadDescText: 'Hỗ trợ định dạng JPG, PNG, GIF, tối đa 5 MB'
+        uploadDescText: 'Hỗ trợ định dạng JPG, PNG, GIF, tối đa 5 MB',
+        uploadSuccess: 'Hình ảnh đã được tải lên thành công',
     },
     profile: {
         title: 'Trung tâm Người dùng',

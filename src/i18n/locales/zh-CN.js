@@ -389,6 +389,7 @@ export default {
         uploadingImages: '上传中...',
         uploadTipText: '拖拽图片到此处或点击上传',
         uploadDescText: '支持 JPG、PNG、GIF 格式，最大 5 MB',
+        uploadSuccess: '图片上传成功',
     },
     profile: {
         title: '用户中心',

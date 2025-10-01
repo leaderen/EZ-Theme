@@ -386,7 +386,8 @@ export default {
     upPictures: '이미지 업로드',
     uploadingImages: '업로드 중...',
     uploadTipText: '이미지를 이곳에 드래그하거나 클릭하여 업로드',
-    uploadDescText: 'JPG, PNG, GIF 형식 지원, 최대 5 MB'
+    uploadDescText: 'JPG, PNG, GIF 형식 지원, 최대 5 MB',
+    uploadSuccess: '이미지 업로드 성공',
   },
   profile: {
     title: '사용자 센터',
