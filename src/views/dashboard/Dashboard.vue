@@ -16,6 +16,9 @@
 
       <!-- 签到转盘 -->
       <CheckinWheel v-if="hasPlan" style="animation-delay: 0.1s"/>
+      
+      <!-- 运气签到转盘 -->
+      <LuckyCheckinWheel v-if="hasPlan" style="animation-delay: 0.15s"/>
 
       <!-- 通知区域 -->
       <!-- 待处理事项提示 -->
@@ -746,6 +749,7 @@ import {
 } from '@tabler/icons-vue';
 import CommonDialog from '@/components/popup/CommonDialog.vue';
 import CheckinWheel from '@/components/CheckinWheel.vue';
+import LuckyCheckinWheel from '@/components/LuckyCheckinWheel.vue';
 import {getNotices, getSubscribe, getUserConfig, getUserInfo, getUserStats, setNextPeriod} from '@/api/dashboard';
 import {useToast} from '@/composables/useToast';
 import {submitOrder} from '@/api/shop';
@@ -859,7 +863,8 @@ export default {
     IconX,
     IconCalendarPlus,
     CommonDialog,
-    CheckinWheel
+    CheckinWheel,
+    LuckyCheckinWheel
   },
   setup() {
     const {t, locale} = useI18n();

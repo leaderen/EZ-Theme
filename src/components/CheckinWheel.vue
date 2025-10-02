@@ -2,11 +2,23 @@
   <div class="checkin-wheel-container">
     <div class="checkin-wheel-card">
       <div class="card-header">
-        <h2 class="card-title">
-          <IconGift :size="20"/>
-          {{ $t('dashboard.dailyCheckin') }}
-        </h2>
+        <div class="header-content">
+          <div class="title-section">
+            <div class="title-icon">
+              <IconGift :size="24"/>
+            </div>
+            <div class="title-text">
+              <h2 class="card-title">{{ $t('dashboard.dailyCheckin') }}</h2>
+              <p class="card-subtitle">每日签到，随机获得 10MB-100MB 流量</p>
+            </div>
+          </div>
+          <div class="header-badge">
+            <IconCalendar :size="16"/>
+            <span>每日一次</span>
+          </div>
+        </div>
       </div>
+      
       <div class="card-body">
         <div class="checkin-wheel-wrapper">
           <!-- 转盘背景 -->
@@ -23,7 +35,7 @@
             >
               <div class="reward-content">
                 <div class="reward-icon">
-                  <IconGift :size="16"/>
+                  <IconGift :size="18"/>
                 </div>
                 <div class="reward-text" :style="{ transform: `rotate(-${index * 45}deg)` }">
                   {{ reward.text }}
@@ -34,8 +46,9 @@
             <!-- 中心圆盘 -->
             <div class="wheel-center">
               <div class="center-logo">
-                <IconGift :size="24"/>
+                <IconGift :size="28"/>
               </div>
+              <div class="center-text">签到</div>
             </div>
             
             <!-- 指针 -->
@@ -52,9 +65,12 @@
               :disabled="isSpinning || hasCheckedIn"
               @click="spinWheel"
             >
-              <IconRefreshCw v-if="isSpinning" :size="20" class="spinning-icon"/>
-              <IconGift v-else :size="20"/>
-              <span>{{ buttonText }}</span>
+              <div class="button-content">
+                <IconRefreshCw v-if="isSpinning" :size="20" class="spinning-icon"/>
+                <IconGift v-else :size="20"/>
+                <span>{{ buttonText }}</span>
+              </div>
+              <div class="button-glow"></div>
             </button>
           </div>
         </div>
@@ -80,7 +96,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { standardCheckin } from '@/api/user'
-import { IconGift, IconRefreshCw, IconCheck, IconX } from '@tabler/icons-vue'
+import { IconGift, IconRefreshCw, IconCheck, IconX, IconCalendar } from '@tabler/icons-vue'
 
 export default {
   name: 'CheckinWheel',
@@ -88,7 +104,8 @@ export default {
     IconGift,
     IconRefreshCw,
     IconCheck,
-    IconX
+    IconX,
+    IconCalendar
   },
   setup() {
     const { t } = useI18n()
@@ -98,7 +115,7 @@ export default {
     const hasCheckedIn = ref(false)
     const checkinResult = ref(null)
     
-    // 奖励配置
+    // 奖励配置 - 更新为10-100MB范围
     const rewards = ref([
       { 
         text: '10MB', 
@@ -106,39 +123,39 @@ export default {
         value: 10 * 1024 * 1024 
       },
       { 
-        text: '50MB', 
+        text: '20MB', 
         gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', 
+        value: 20 * 1024 * 1024 
+      },
+      { 
+        text: '30MB', 
+        gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', 
+        value: 30 * 1024 * 1024 
+      },
+      { 
+        text: '50MB', 
+        gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', 
         value: 50 * 1024 * 1024 
       },
       { 
-        text: '100MB', 
-        gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', 
-        value: 100 * 1024 * 1024 
-      },
-      { 
-        text: '200MB', 
-        gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', 
-        value: 200 * 1024 * 1024 
-      },
-      { 
-        text: '500MB', 
+        text: '70MB', 
         gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', 
-        value: 500 * 1024 * 1024 
-      },
-      { 
-        text: '1GB', 
-        gradient: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)', 
-        value: 1024 * 1024 * 1024 
-      },
-      { 
-        text: '200MB', 
-        gradient: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)', 
-        value: 200 * 1024 * 1024 
+        value: 70 * 1024 * 1024 
       },
       { 
         text: '100MB', 
-        gradient: 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)', 
+        gradient: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)', 
         value: 100 * 1024 * 1024 
+      },
+      { 
+        text: '80MB', 
+        gradient: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)', 
+        value: 80 * 1024 * 1024 
+      },
+      { 
+        text: '60MB', 
+        gradient: 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)', 
+        value: 60 * 1024 * 1024 
       }
     ])
     
@@ -219,17 +236,26 @@ export default {
 }
 
 .checkin-wheel-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  backdrop-filter: blur(20px);
-  border-radius: 24px;
-  padding: 32px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
+  backdrop-filter: blur(25px);
+  border-radius: 28px;
+  padding: 28px;
   box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.1),
-    0 8px 16px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+    0 25px 50px rgba(0, 0, 0, 0.12),
+    0 12px 24px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   position: relative;
   overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.checkin-wheel-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 30px 60px rgba(0, 0, 0, 0.15),
+    0 15px 30px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .checkin-wheel-card::before {
@@ -239,27 +265,71 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+  border-radius: 28px;
   z-index: -1;
 }
 
 .card-header {
+  margin-bottom: 24px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.title-section {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 20px;
+  gap: 16px;
+  flex: 1;
+}
+
+.title-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+
+.title-text {
+  flex: 1;
 }
 
 .card-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--text-primary);
+  margin: 0 0 4px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
   margin: 0;
+  opacity: 0.8;
+}
+
+.header-badge {
   display: flex;
   align-items: center;
-  gap: 10px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  gap: 6px;
+  padding: 8px 12px;
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(34, 197, 94, 0.2);
 }
 
 .checkin-wheel-wrapper {
@@ -271,16 +341,16 @@ export default {
 
 .wheel-background {
   position: relative;
-  width: 240px;
-  height: 240px;
+  width: 260px;
+  height: 260px;
   border-radius: 50%;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   transition: transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.15),
-    0 8px 16px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  border: 4px solid rgba(255, 255, 255, 0.3);
+    0 25px 50px rgba(0, 0, 0, 0.2),
+    0 12px 24px rgba(0, 0, 0, 0.15),
+    inset 0 2px 0 rgba(255, 255, 255, 0.3);
+  border: 5px solid rgba(255, 255, 255, 0.4);
 }
 
 .wheel-background.spinning {
@@ -292,17 +362,18 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   border-radius: 50%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   box-shadow: 
-    0 8px 24px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  border: 3px solid rgba(255, 255, 255, 0.9);
+    0 12px 32px rgba(0, 0, 0, 0.2),
+    inset 0 2px 0 rgba(255, 255, 255, 0.9);
+  border: 4px solid rgba(255, 255, 255, 0.95);
   z-index: 3;
 }
 
@@ -311,6 +382,14 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 2px;
+}
+
+.center-text {
+  font-size: 10px;
+  font-weight: 700;
+  color: #667eea;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .wheel-pointer {
@@ -385,10 +464,11 @@ export default {
 }
 
 .wheel-button {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 16px 32px;
+  justify-content: center;
+  padding: 18px 36px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
@@ -398,22 +478,46 @@ export default {
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   box-shadow: 
-    0 8px 24px rgba(102, 126, 234, 0.4),
-    0 4px 12px rgba(0, 0, 0, 0.15);
-  position: relative;
+    0 12px 32px rgba(102, 126, 234, 0.4),
+    0 6px 16px rgba(0, 0, 0, 0.15);
   overflow: hidden;
   letter-spacing: 0.5px;
+  min-width: 160px;
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.button-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+  border-radius: 50px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .wheel-button:hover:not(.disabled) {
-  transform: translateY(-3px) scale(1.02);
+  transform: translateY(-4px) scale(1.03);
   box-shadow: 
-    0 12px 32px rgba(102, 126, 234, 0.5),
-    0 8px 20px rgba(0, 0, 0, 0.2);
+    0 16px 40px rgba(102, 126, 234, 0.5),
+    0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+.wheel-button:hover:not(.disabled) .button-glow {
+  opacity: 1;
 }
 
 .wheel-button:active:not(.disabled) {
-  transform: translateY(-1px) scale(0.98);
+  transform: translateY(-2px) scale(0.98);
 }
 
 .wheel-button.disabled {
@@ -472,28 +576,55 @@ export default {
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-  .wheel-background {
-    width: 200px;
-    height: 200px;
+  .checkin-wheel-card {
+    padding: 20px;
   }
   
-  .wheel-center {
-    width: 50px;
-    height: 50px;
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
   
-  .center-logo {
+  .title-section {
+    gap: 12px;
+  }
+  
+  .title-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .card-title {
     font-size: 18px;
   }
   
+  .card-subtitle {
+    font-size: 13px;
+  }
+  
+  .wheel-background {
+    width: 220px;
+    height: 220px;
+  }
+  
+  .wheel-center {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .center-text {
+    font-size: 9px;
+  }
+  
   .reward-segment {
-    width: 100px;
-    height: 100px;
-    transform-origin: 0 100px;
+    width: 110px;
+    height: 110px;
+    transform-origin: 0 110px;
   }
   
   .reward-content {
-    transform: translateY(15px);
+    transform: translateY(18px);
   }
   
   .reward-text {
@@ -501,8 +632,9 @@ export default {
   }
   
   .wheel-button {
-    padding: 12px 24px;
+    padding: 14px 28px;
     font-size: 14px;
+    min-width: 140px;
   }
   
   .pointer-arrow {

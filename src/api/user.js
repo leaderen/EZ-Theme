@@ -52,6 +52,10 @@ export function standardCheckin() {
   return checkin({ type: 1 });
 }
 
+export function luckyCheckin(input) {
+  return checkin({ type: 2, input });
+}
+
 export function redeemGiftCard(giftcard) {
 
   return request({
