@@ -23,6 +23,11 @@
         <div class="checkin-wheel-wrapper">
           <!-- 转盘背景 -->
           <div class="wheel-background" :class="{ 'spinning': isSpinning }">
+            <!-- 装饰灯泡 -->
+            <div class="decorative-lights">
+              <div v-for="i in 16" :key="i" class="light" :style="{ transform: `rotate(${i * 22.5}deg)` }"></div>
+            </div>
+            
             <!-- 奖励区域 -->
             <div 
               v-for="(reward, index) in rewards" 
@@ -30,12 +35,12 @@
               class="reward-segment"
               :style="{ 
                 transform: `rotate(${index * 45}deg)`,
-                background: reward.gradient 
+                background: reward.color 
               }"
             >
               <div class="reward-content">
-                <div class="reward-icon">
-                  <IconGift :size="18"/>
+                <div class="cartoon-character" :class="reward.character">
+                  {{ reward.emoji }}
                 </div>
                 <div class="reward-text" :style="{ transform: `rotate(-${index * 45}deg)` }">
                   {{ reward.text }}
@@ -45,10 +50,8 @@
             
             <!-- 中心圆盘 -->
             <div class="wheel-center">
-              <div class="center-logo">
-                <IconGift :size="28"/>
-              </div>
-              <div class="center-text">签到</div>
+              <div class="center-text">每日签到</div>
+              <div class="center-subtitle">获得流量</div>
             </div>
             
             <!-- 指针 -->
@@ -115,47 +118,63 @@ export default {
     const hasCheckedIn = ref(false)
     const checkinResult = ref(null)
     
-    // 奖励配置 - 更新为10-100MB范围
+    // 奖励配置 - 卡通风格
     const rewards = ref([
       { 
         text: '10MB', 
-        gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
-        value: 10 * 1024 * 1024 
+        color: '#ff6b6b', 
+        value: 10 * 1024 * 1024,
+        emoji: '🎁',
+        character: 'character-1'
       },
       { 
         text: '20MB', 
-        gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', 
-        value: 20 * 1024 * 1024 
+        color: '#ffa726', 
+        value: 20 * 1024 * 1024,
+        emoji: '🎉',
+        character: 'character-2'
       },
       { 
         text: '30MB', 
-        gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', 
-        value: 30 * 1024 * 1024 
+        color: '#ff6b6b', 
+        value: 30 * 1024 * 1024,
+        emoji: '🎊',
+        character: 'character-3'
       },
       { 
         text: '50MB', 
-        gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', 
-        value: 50 * 1024 * 1024 
+        color: '#ffa726', 
+        value: 50 * 1024 * 1024,
+        emoji: '🎈',
+        character: 'character-4'
       },
       { 
         text: '70MB', 
-        gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', 
-        value: 70 * 1024 * 1024 
+        color: '#ff6b6b', 
+        value: 70 * 1024 * 1024,
+        emoji: '🎯',
+        character: 'character-5'
       },
       { 
         text: '100MB', 
-        gradient: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)', 
-        value: 100 * 1024 * 1024 
+        color: '#4fc3f7', 
+        value: 100 * 1024 * 1024,
+        emoji: '🏆',
+        character: 'character-6'
       },
       { 
         text: '80MB', 
-        gradient: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)', 
-        value: 80 * 1024 * 1024 
+        color: '#ffa726', 
+        value: 80 * 1024 * 1024,
+        emoji: '⭐',
+        character: 'character-7'
       },
       { 
         text: '60MB', 
-        gradient: 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)', 
-        value: 60 * 1024 * 1024 
+        color: '#ff6b6b', 
+        value: 60 * 1024 * 1024,
+        emoji: '🎪',
+        character: 'character-8'
       }
     ])
     
@@ -341,20 +360,52 @@ export default {
 
 .wheel-background {
   position: relative;
-  width: 260px;
-  height: 260px;
+  width: 280px;
+  height: 280px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #ffffff;
   transition: transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   box-shadow: 
-    0 25px 50px rgba(0, 0, 0, 0.2),
-    0 12px 24px rgba(0, 0, 0, 0.15),
-    inset 0 2px 0 rgba(255, 255, 255, 0.3);
-  border: 5px solid rgba(255, 255, 255, 0.4);
+    0 20px 40px rgba(0, 0, 0, 0.15),
+    0 8px 16px rgba(0, 0, 0, 0.1);
+  border: 8px solid #ff6b6b;
+  overflow: hidden;
 }
 
 .wheel-background.spinning {
   transform: rotate(1800deg);
+}
+
+.decorative-lights {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.light {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  background: #ffd700;
+  border-radius: 50%;
+  transform-origin: 0 144px;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+  animation: twinkle 2s ease-in-out infinite alternate;
+}
+
+.light:nth-child(odd) {
+  animation-delay: 0.5s;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.6; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.2); }
 }
 
 .wheel-center {
@@ -362,39 +413,41 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 70px;
-  height: 70px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  width: 80px;
+  height: 80px;
+  background: #ff6b6b;
   border-radius: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   box-shadow: 
-    0 12px 32px rgba(0, 0, 0, 0.2),
-    inset 0 2px 0 rgba(255, 255, 255, 0.9);
-  border: 4px solid rgba(255, 255, 255, 0.95);
+    0 8px 24px rgba(255, 107, 107, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.2);
+  border: 4px solid #ffd700;
   z-index: 3;
 }
 
-.center-logo {
-  color: #667eea;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2px;
+.center-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  line-height: 1.2;
+  text-align: center;
 }
 
-.center-text {
-  font-size: 10px;
-  font-weight: 700;
-  color: #667eea;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+.center-subtitle {
+  font-size: 8px;
+  font-weight: 600;
+  color: #ffd700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  margin-top: 2px;
 }
 
 .wheel-pointer {
   position: absolute;
-  top: -8px;
+  top: -12px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 4;
@@ -403,59 +456,74 @@ export default {
 .pointer-arrow {
   width: 0;
   height: 0;
-  border-left: 12px solid transparent;
-  border-right: 12px solid transparent;
-  border-bottom: 24px solid #ff6b6b;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-bottom: 32px solid #ffd700;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
   position: relative;
 }
 
 .pointer-arrow::after {
   content: '';
   position: absolute;
-  top: 2px;
-  left: -10px;
+  top: 4px;
+  left: -12px;
   width: 0;
   height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 20px solid #ffffff;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 24px solid #ffffff;
 }
 
 .reward-segment {
   position: absolute;
   top: 0;
   left: 50%;
-  width: 120px;
-  height: 120px;
-  transform-origin: 0 120px;
+  width: 140px;
+  height: 140px;
+  transform-origin: 0 140px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0 0 120px 120px;
+  border-radius: 0 0 140px 140px;
   overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .reward-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  transform: translateY(20px);
+  gap: 6px;
+  transform: translateY(25px);
 }
 
-.reward-icon {
-  color: rgba(255, 255, 255, 0.9);
+.cartoon-character {
+  font-size: 24px;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.cartoon-character:nth-child(odd) {
+  animation-delay: 0.3s;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
 }
 
 .reward-text {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
   white-space: nowrap;
   letter-spacing: 0.5px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2px 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .wheel-button-container {
@@ -469,7 +537,7 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 18px 36px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8a80 100%);
   color: white;
   border: none;
   border-radius: 50px;
@@ -478,11 +546,12 @@ export default {
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   box-shadow: 
-    0 12px 32px rgba(102, 126, 234, 0.4),
+    0 12px 32px rgba(255, 107, 107, 0.4),
     0 6px 16px rgba(0, 0, 0, 0.15);
   overflow: hidden;
   letter-spacing: 0.5px;
   min-width: 160px;
+  border: 3px solid #ffd700;
 }
 
 .button-content {
@@ -508,7 +577,7 @@ export default {
 .wheel-button:hover:not(.disabled) {
   transform: translateY(-4px) scale(1.03);
   box-shadow: 
-    0 16px 40px rgba(102, 126, 234, 0.5),
+    0 16px 40px rgba(255, 107, 107, 0.5),
     0 10px 24px rgba(0, 0, 0, 0.2);
 }
 
@@ -604,27 +673,35 @@ export default {
   }
   
   .wheel-background {
-    width: 220px;
-    height: 220px;
+    width: 240px;
+    height: 240px;
   }
   
   .wheel-center {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
   }
   
   .center-text {
-    font-size: 9px;
+    font-size: 10px;
+  }
+  
+  .center-subtitle {
+    font-size: 7px;
   }
   
   .reward-segment {
-    width: 110px;
-    height: 110px;
-    transform-origin: 0 110px;
+    width: 120px;
+    height: 120px;
+    transform-origin: 0 120px;
   }
   
   .reward-content {
-    transform: translateY(18px);
+    transform: translateY(20px);
+  }
+  
+  .cartoon-character {
+    font-size: 20px;
   }
   
   .reward-text {
@@ -638,16 +715,16 @@ export default {
   }
   
   .pointer-arrow {
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 20px solid #ff6b6b;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 24px solid #ffd700;
   }
   
   .pointer-arrow::after {
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 16px solid #ffffff;
-    left: -8px;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 20px solid #ffffff;
+    left: -10px;
   }
 }
 </style>

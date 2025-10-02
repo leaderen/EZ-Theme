@@ -80,6 +80,11 @@
         <!-- 转盘区域 -->
         <div class="wheel-section">
           <div class="wheel-background" :class="{ 'spinning': isSpinning }">
+            <!-- 装饰灯泡 -->
+            <div class="decorative-lights">
+              <div v-for="i in 16" :key="i" class="light" :style="{ transform: `rotate(${i * 22.5}deg)` }"></div>
+            </div>
+            
             <!-- 奖励区域 -->
             <div 
               v-for="(reward, index) in rewards" 
@@ -87,12 +92,12 @@
               class="reward-segment"
               :style="{ 
                 transform: `rotate(${index * 45}deg)`,
-                background: reward.gradient 
+                background: reward.color 
               }"
             >
               <div class="reward-content">
-                <div class="reward-icon">
-                  <IconDice :size="16"/>
+                <div class="cartoon-character" :class="reward.character">
+                  {{ reward.emoji }}
                 </div>
                 <div class="reward-text" :style="{ transform: `rotate(-${index * 45}deg)` }">
                   {{ reward.text }}
@@ -102,10 +107,8 @@
             
             <!-- 中心圆盘 -->
             <div class="wheel-center">
-              <div class="center-logo">
-                <IconDice :size="24"/>
-              </div>
-              <div class="center-text">运气</div>
+              <div class="center-text">运气签到</div>
+              <div class="center-subtitle">有风险</div>
             </div>
             
             <!-- 指针 -->
@@ -187,47 +190,63 @@ export default {
       d: 0
     })
     
-    // 奖励配置 - 显示可能的正负结果
+    // 奖励配置 - 卡通风格的正负结果
     const rewards = ref([
       { 
         text: '-100%', 
-        gradient: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)', 
-        value: -1 
+        color: '#ef4444', 
+        value: -1,
+        emoji: '😢',
+        character: 'character-1'
       },
       { 
         text: '-50%', 
-        gradient: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)', 
-        value: -0.5 
+        color: '#f97316', 
+        value: -0.5,
+        emoji: '😟',
+        character: 'character-2'
       },
       { 
         text: '-25%', 
-        gradient: 'linear-gradient(135deg, #eab308 0%, #ca8a04 100%)', 
-        value: -0.25 
+        color: '#eab308', 
+        value: -0.25,
+        emoji: '😐',
+        character: 'character-3'
       },
       { 
         text: '0%', 
-        gradient: 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)', 
-        value: 0 
+        color: '#6b7280', 
+        value: 0,
+        emoji: '😶',
+        character: 'character-4'
       },
       { 
         text: '+25%', 
-        gradient: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)', 
-        value: 0.25 
+        color: '#22c55e', 
+        value: 0.25,
+        emoji: '😊',
+        character: 'character-5'
       },
       { 
         text: '+50%', 
-        gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', 
-        value: 0.5 
+        color: '#3b82f6', 
+        value: 0.5,
+        emoji: '😄',
+        character: 'character-6'
       },
       { 
         text: '+100%', 
-        gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', 
-        value: 1 
+        color: '#8b5cf6', 
+        value: 1,
+        emoji: '🎉',
+        character: 'character-7'
       },
       { 
         text: '+200%', 
-        gradient: 'linear-gradient(135deg, #ec4899 0%, #db2777 100%)', 
-        value: 2 
+        color: '#ec4899', 
+        value: 2,
+        emoji: '🏆',
+        character: 'character-8'
       }
     ])
     
@@ -572,20 +591,52 @@ export default {
 
 .wheel-background {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 240px;
+  height: 240px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+  background: #ffffff;
   transition: transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.2),
-    0 8px 16px rgba(0, 0, 0, 0.15),
-    inset 0 2px 0 rgba(255, 255, 255, 0.3);
-  border: 4px solid rgba(255, 255, 255, 0.4);
+    0 20px 40px rgba(0, 0, 0, 0.15),
+    0 8px 16px rgba(0, 0, 0, 0.1);
+  border: 8px solid #8b5cf6;
+  overflow: hidden;
 }
 
 .wheel-background.spinning {
   transform: rotate(1800deg);
+}
+
+.decorative-lights {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.light {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background: #ffd700;
+  border-radius: 50%;
+  transform-origin: 0 124px;
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
+  animation: twinkle 2s ease-in-out infinite alternate;
+}
+
+.light:nth-child(odd) {
+  animation-delay: 0.5s;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.6; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.2); }
 }
 
 .wheel-center {
@@ -593,39 +644,41 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  width: 70px;
+  height: 70px;
+  background: #8b5cf6;
   border-radius: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   box-shadow: 
-    0 8px 24px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  border: 3px solid rgba(255, 255, 255, 0.9);
+    0 8px 24px rgba(139, 92, 246, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.2);
+  border: 4px solid #ffd700;
   z-index: 3;
 }
 
-.center-logo {
-  color: #8b5cf6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2px;
+.center-text {
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  line-height: 1.2;
+  text-align: center;
 }
 
-.center-text {
-  font-size: 9px;
-  font-weight: 700;
-  color: #8b5cf6;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+.center-subtitle {
+  font-size: 7px;
+  font-weight: 600;
+  color: #ffd700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  margin-top: 2px;
 }
 
 .wheel-pointer {
   position: absolute;
-  top: -6px;
+  top: -10px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 4;
@@ -634,59 +687,74 @@ export default {
 .pointer-arrow {
   width: 0;
   height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 20px solid #ef4444;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-bottom: 28px solid #ffd700;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
   position: relative;
 }
 
 .pointer-arrow::after {
   content: '';
   position: absolute;
-  top: 2px;
-  left: -8px;
+  top: 4px;
+  left: -11px;
   width: 0;
   height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 16px solid #ffffff;
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
+  border-bottom: 22px solid #ffffff;
 }
 
 .reward-segment {
   position: absolute;
   top: 0;
   left: 50%;
-  width: 100px;
-  height: 100px;
-  transform-origin: 0 100px;
+  width: 120px;
+  height: 120px;
+  transform-origin: 0 120px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0 0 100px 100px;
+  border-radius: 0 0 120px 120px;
   overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .reward-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  transform: translateY(15px);
+  gap: 6px;
+  transform: translateY(20px);
 }
 
-.reward-icon {
-  color: rgba(255, 255, 255, 0.9);
+.cartoon-character {
+  font-size: 20px;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.cartoon-character:nth-child(odd) {
+  animation-delay: 0.3s;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
 }
 
 .reward-text {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
   white-space: nowrap;
   letter-spacing: 0.5px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2px 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .wheel-button-container {
@@ -700,7 +768,7 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 16px 32px;
-  background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+  background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
   color: white;
   border: none;
   border-radius: 50px;
@@ -714,6 +782,7 @@ export default {
   overflow: hidden;
   letter-spacing: 0.5px;
   min-width: 180px;
+  border: 3px solid #ffd700;
 }
 
 .button-content {
@@ -851,27 +920,35 @@ export default {
   }
   
   .wheel-background {
-    width: 180px;
-    height: 180px;
+    width: 200px;
+    height: 200px;
   }
   
   .wheel-center {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
   }
   
   .center-text {
-    font-size: 8px;
+    font-size: 9px;
+  }
+  
+  .center-subtitle {
+    font-size: 6px;
   }
   
   .reward-segment {
-    width: 90px;
-    height: 90px;
-    transform-origin: 0 90px;
+    width: 100px;
+    height: 100px;
+    transform-origin: 0 100px;
   }
   
   .reward-content {
-    transform: translateY(12px);
+    transform: translateY(15px);
+  }
+  
+  .cartoon-character {
+    font-size: 16px;
   }
   
   .reward-text {
@@ -885,16 +962,16 @@ export default {
   }
   
   .pointer-arrow {
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 16px solid #ef4444;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 20px solid #ffd700;
   }
   
   .pointer-arrow::after {
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-bottom: 12px solid #ffffff;
-    left: -6px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 16px solid #ffffff;
+    left: -8px;
   }
 }
 </style>
